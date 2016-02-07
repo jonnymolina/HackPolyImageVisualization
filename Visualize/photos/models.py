@@ -5,4 +5,13 @@ from django.core.validators import URLValidator
 class Photo(models.Model):
     name = models.CharField(max_length=100)
     url = models.TextField(validators=[URLValidator()])
-    
+    tags = models.ArrayField(
+        models.CharField(max_length=50, blank=True),
+        size=none)
+
+class Node(models.Model):
+    photo = models.Photo
+    parent = models.Node
+    children = models.ArrayField(
+        models.Node,
+        size=none)
