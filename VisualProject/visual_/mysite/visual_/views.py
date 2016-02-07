@@ -7,7 +7,7 @@ from django.views.decorators.csrf import *
 from clarifai.client import ClarifaiApi
 from firebase import firebase
 from firebase import decorators
-from functions import *
+from visual_.functions import *
 import StringIO
 import os, requests, json, os.path
 
@@ -81,9 +81,8 @@ def add(request):
         url = config['url']
         print 'url:  ' + url
         fb = firebase.FirebaseApplication('https://hackpolyvisual.firebaseio.com/', None)
-        func = Functions()
-        tags = func.get_tags(url)
-        result = fb.post(url='/', params={'not':'helpful'}, data={'url':url, 'tags': str(tags)}, connection=None)
+        tags = get_tags(url)
+        result = fb.post(url='/', params={'not':'helpful'}, data={'url':url, 'tags': tags}, connection=None)
         print "add res: " + str(result)
         template = loader.get_template('add.html')
         return HttpResponse(template.render(request))
