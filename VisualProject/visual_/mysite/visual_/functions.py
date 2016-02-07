@@ -9,13 +9,6 @@ class Functions:
 		self.clarifai_api = ClarifaiApi()
 		print("initialized")
 
-	def get_tags(self, url):
-		result = self.clarifai_api.tag_image_urls(url)
-		tags = result["results"][0]["result"]["tag"]["classes"]
-		conf_intervals = result["results"][0]["result"]["tag"]["probs"]
-
-		return get_tag_sets(tags, conf_intervals)
-
 	def get_tag_sets(self, tags, conf_intervals):
 
 		size = len([x for x in conf_intervals if x > 0.90])
@@ -25,6 +18,13 @@ class Functions:
 			tag_sets.append((tuple(tags[i:i + int(size/3)])))
 
 		return tag_sets		
+
+	def get_tags(self, url):
+		result = self.clarifai_api.tag_image_urls(url)
+		tags = result["results"][0]["result"]["tag"]["classes"]
+		conf_intervals = result["results"][0]["result"]["tag"]["probs"]
+
+		return get_tag_sets(tags, conf_intervals)
 
 	def get_image_url(self, tags):
 		url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?$format=json&Query=%27"+ "%20".join(tags) +"%27"
@@ -46,3 +46,4 @@ class Functions:
 
 #print(Functions().get_tags("http://dreamatico.com/data_images/animals/animals-4.jpg"))
 print(Functions().get_image_url( tags=["fuzzy", "cats", "cute"]))
+print(Functions().get_tags("http://www.cutepandapictures.com/wp-content/uploads/2012/07/babypandahugsatree.jpg"))
